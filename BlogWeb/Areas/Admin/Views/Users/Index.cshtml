@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BlogWeb.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Quản lý danh mục</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h5 class="card-header">Quản lý người dùng</h5>
+        <div style="text-align: right; padding-right: 20px;">
+            <a href="/Admin/Users/Create" class="btn btn-primary">Thêm mới</a>
+        </div>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã người dùng</th>
+                        <th>Tên người dùng</th>
+                        <th>Email</th>
+                        <th>Ngày tạo</th>
+                        <th>Hoạt động</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model != null && Model.Count() > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <th scope="row">@item.UserId</th>
+                                <td>@item.Username</td>
+                                <td>@item.Email</td>
+                                <td>@item.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a href="/Admin/Users/Edit/@item.UserId" class="btn btn-primary">Sửa</a>
+                                    <a href="/Admin/Users/Delete/@item.UserId" class="btn btn-danger">Xóa</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
