@@ -7,7 +7,6 @@ namespace BlogWeb.Models
     {
         public User()
         {
-            Comments = new HashSet<Comment>();
             Posts = new HashSet<Post>();
         }
 
@@ -17,7 +16,6 @@ namespace BlogWeb.Models
         public string Email { get; set; } = null!;
         public DateTime? CreatedAt { get; set; }
 
-        public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
     }
 }

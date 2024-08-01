@@ -54,23 +54,11 @@ namespace BlogWeb.Models
                 entity.Property(e => e.PostId).HasColumnName("PostID");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.Post)
-                    .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.PostId)
-                    .HasConstraintName("FK__Comments__PostID__44FF419A");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK__Comments__UserID__45F365D3");
             });
 
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.PostId).HasColumnName("PostID");
-
-                entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -86,15 +74,17 @@ namespace BlogWeb.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.HasOne(d => d.Author)
-                    .WithMany(p => p.Posts)
-                    .HasForeignKey(d => d.AuthorId)
-                    .HasConstraintName("FK__Posts__AuthorID__403A8C7D");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Posts)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK__Posts__CategoryI__412EB0B6");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Posts_Users");
             });
 
             modelBuilder.Entity<User>(entity =>

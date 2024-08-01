@@ -25,10 +25,9 @@ namespace BlogWeb.Areas.Admin.Controllers
         // GET: Admin/Posts
         public async Task<IActionResult> Index()
         {
-            var blogWebContext = _context.Posts.Include(p => p.Author).Include(p => p.Category);
+            var blogWebContext = _context.Posts.Include(p => p.User).Include(p => p.Category);
             return View(await blogWebContext.ToListAsync());
         }
-
 
         // GET: Admin/Posts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -39,7 +38,7 @@ namespace BlogWeb.Areas.Admin.Controllers
             }
 
             var post = await _context.Posts
-                .Include(p => p.Author)
+                .Include(p => p.User)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
@@ -53,7 +52,7 @@ namespace BlogWeb.Areas.Admin.Controllers
         // GET: Admin/Posts/Create
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "Username");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
             return View();
         }
@@ -63,7 +62,7 @@ namespace BlogWeb.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,Content,Thumbnail,AuthorId,CategoryId,IsFeatured,IsActive,CreatedAt,UpdatedAt,IsTrend")] Post post, IFormFile Thumbnail)
+        public async Task<IActionResult> Create([Bind("PostId,Title,Content,Thumbnail,UserId,CategoryId,IsFeatured,IsActive,CreatedAt,UpdatedAt,IsTrend")] Post post, IFormFile Thumbnail)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +74,7 @@ namespace BlogWeb.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "Username", post.AuthorId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username", post.UserId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", post.CategoryId);
             return View(post);
         }
@@ -93,7 +92,7 @@ namespace BlogWeb.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "Username", post.AuthorId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username", post.UserId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", post.CategoryId);
             return View(post);
         }
@@ -103,7 +102,7 @@ namespace BlogWeb.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,Content,Thumbnail,AuthorId,CategoryId,IsFeatured,IsActive,CreatedAt,UpdatedAt,IsTrend")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("PostId,Title,Content,Thumbnail,UserId,CategoryId,IsFeatured,IsActive,CreatedAt,UpdatedAt,IsTrend")] Post post)
         {
             if (id != post.PostId)
             {
@@ -130,7 +129,7 @@ namespace BlogWeb.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "UserId", "Username", post.AuthorId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username", post.UserId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryName", post.CategoryId);
             return View(post);
         }
@@ -144,7 +143,7 @@ namespace BlogWeb.Areas.Admin.Controllers
             }
 
             var post = await _context.Posts
-                .Include(p => p.Author)
+                .Include(p => p.User)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
@@ -169,15 +168,16 @@ namespace BlogWeb.Areas.Admin.Controllers
             {
                 _context.Posts.Remove(post);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PostExists(int id)
         {
-          return (_context.Posts?.Any(e => e.PostId == id)).GetValueOrDefault();
+            return (_context.Posts?.Any(e => e.PostId == id)).GetValueOrDefault();
         }
+
         private async Task<string> UploadFile(IFormFile file)
         {
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads/Post");
