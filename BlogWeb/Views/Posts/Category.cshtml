@@ -1,0 +1,38 @@
+﻿@model List<BlogWeb.Models.Post>
+@{
+    Layout = "_DetailLayout";
+}
+<div class="category-posts">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var post in Model)
+            {
+                <div class="col-md-6">
+                    <div class="single-recent-blog-post card-view">
+                        <div class="thumb">
+                            @if (!string.IsNullOrEmpty(post.Thumbnail))
+                            {
+                                <img class="img-fluid" src="@Url.Content($"~/uploads/post/{post.Thumbnail}")" alt="@post.Title" style="height: 196px; width: auto;">
+                            }
+                            <ul class="thumb-info">
+                                <li><a><i class="ti-user"></i>@post.User?.Username</a></li>
+                                <li><a><i class="ti-notepad"></i>@post.CreatedAt?.ToString("MMMM dd, yyyy")</a></li>
+                            </ul>
+                        </div>
+                        <div class="details mt-20">
+                            <a href="@Url.Action("Detail", "Posts", new { id = post.PostId })">
+                                <h3>@post.Title</h3>
+                            </a>
+                            <a class="button" href="@Url.Action("Detail", "Posts", new { id = post.PostId })">Đọc thêm<i class="ti-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Không có bài viết nào trong danh mục này.</p>
+    }
+</div>

@@ -1,0 +1,22 @@
+﻿@model List<BlogWeb.Models.Category>
+
+<div class="single-sidebar-widget post-category-widget">
+    <h4 class="single-sidebar-widget__title">Danh mục bài viết</h4>
+    @if (Model != null && Model.Any())
+    {
+        <ul class="cat-list mt-20">
+            @foreach (var category in Model)
+            {
+                <li>
+                    <a class="d-flex justify-content-between" href="@Url.Action("Category", "Posts", new { id = category.CategoryId })">
+                        <p>@category.CategoryName</p>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Không có danh mục nào.</p>
+    }
+</div>

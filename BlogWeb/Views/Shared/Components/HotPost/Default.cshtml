@@ -1,0 +1,38 @@
+﻿@model List<BlogWeb.Models.Post>
+
+@if (Model != null && Model.Any())
+{
+    <div class="single-sidebar-widget popular-post-widget">
+        <h4 class="single-sidebar-widget__title">Bài viết nổi bật</h4>
+        <div class="popular-post-list">
+            @foreach (var post in Model.Where(p => p.IsFeatured && p.IsActive))
+            {
+                <div class="single-post-list">
+                    <div class="thumb">
+                        @if (!string.IsNullOrEmpty(post.Thumbnail))
+                        {
+                            <img class="img-fluid" src="@Url.Content($"~/uploads/post/{post.Thumbnail}")" alt="@post.Title">
+                        }
+                        else
+                        {
+                            <img class="img-fluid" src="/img/default-thumbnail.png" alt="Default Thumbnail">
+                        }
+                        <ul class="thumb-info">
+                            <li><a >@post.User?.Username</a></li>
+                            <li><a >@post.CreatedAt?.ToString("MMMM, dd")</a></li>
+                        </ul>
+                    </div>
+                    <div class="details mt-20">
+                        <a href="@Url.Action("Detail", "Posts", new { id = post.PostId })">
+                            <h6>@post.Title</h6>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>Không có bài viết nào.</p>
+}
