@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/Style/vendors/owl-carousel/owl.carousel.min.css">
 
     <link rel="stylesheet" href="/Style/css/style.css">
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <!--================Header Menu Area =================-->
@@ -207,6 +208,6 @@
     <script src="/Style/js/jquery.ajaxchimp.min.js"></script>
     <script src="/Style/js/mail-script.js"></script>
     <script src="/Style/js/main.js"></script>
-    <script src="/Style/js/JavaScript.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

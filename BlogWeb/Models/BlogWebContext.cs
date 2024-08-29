@@ -45,15 +45,18 @@ namespace BlogWeb.Models
             {
                 entity.Property(e => e.CommentId).HasColumnName("CommentID");
 
-                entity.Property(e => e.Content).HasColumnType("text");
-
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.PostId).HasColumnName("PostID");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.Property(e => e.Username).HasMaxLength(50);
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Comments)
+                    .HasForeignKey(d => d.PostId)
+                    .HasConstraintName("FK_Comments_Posts");
             });
 
             modelBuilder.Entity<Post>(entity =>

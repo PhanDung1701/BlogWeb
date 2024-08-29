@@ -34,57 +34,191 @@
 </div>
 
 <!-- Khung danh sách bình luận -->
+<<!-- Khung danh sách bình luận -->
 <div class="comment-section">
     <h4>Bình luận</h4>
     <div class="comment-list">
-        <!-- Comments will be dynamically inserted here by JavaScript -->
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="single-comment justify-content-between d-flex">
+                <div class="user justify-content-between d-flex">
+
+                    <div class="desc">
+                        <h5><a>@comment.Username</a></h5>
+                        <p class="date">@comment.CreatedAt?.ToString("MMMM dd, yyyy hh:mm tt")</p>
+                        <p class="comment">@comment.Content</p>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
 <div class="comment-form">
     <h4>Thêm bình luận</h4>
-    <form>
-        <div class="form-group form-inline">
-            <div class="form-group col-lg-6 col-md-6 name">
-                <input type="text" class="form-control" id="name" placeholder="Tên hiển thị" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Tên hiển thị'">
-            </div>
-            <div class="form-group col-lg-6 col-md-6 email">
-                <input type="email" class="form-control" id="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
-            </div>
+    <form id="commentForm">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="postId" value="@Model.PostId" />
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Tên hiển thị" required>
         </div>
         <div class="form-group">
-            <textarea class="form-control mb-10" rows="5" name="message" placeholder="Nội dung bình luận" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Nội dung bình luận'" required=""></textarea>
+            <input type="email" class="form-control" name="email" placeholder="Email">
         </div>
-        <a href="#" class="button submit_btn">Bình luận</a>
+        <div class="form-group">
+            <textarea class="form-control mb-10" rows="5" name="content" placeholder="Nội dung bình luận" required=""></textarea>
+        </div>
+        <button type="submit" class="button submit_btn">Bình luận</button>
     </form>
 </div>
 
+
 <style>
-    .post-content {
-        line-height: 1.2; /* Khoảng cách giữa các dòng */
-        font-size: 1rem; /* Kích thước chữ có thể điều chỉnh theo nhu cầu */
-        text-align: justify; /* Căn chỉnh đều hai bên */
-        margin-bottom: 20px; /* Khoảng cách dưới nội dung chữ nếu cần */
-    }
+    ..post-content {
+    line-height: 1.6; /* Khoảng cách giữa các dòng */
+    font-size: 1rem; 
+    text-align: justify;
+    margin-bottom: 20px;
+}
 
-    .comment-section {
-    /* Khung viền của khung danh sách bình luận */
-        padding: 20px; /* Khoảng cách bên trong khung */
-        margin-bottom: 20px; /* Khoảng cách dưới khung */
-    }
+.comment-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f8f9fa; /* Màu nền khung */
+    border: 1px solid #ddd;
+}
 
-    .comment-list {
-        border-top: 1px solid #ddd; /* Viền trên của danh sách bình luận */
-        padding-top: 10px; /* Khoảng cách giữa tiêu đề và danh sách bình luận */
-    }
+.comment-list {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
 
-        .comment-list .single-comment {
-            border-bottom: 1px solid #ddd; /* Viền dưới mỗi bình luận */
-            padding-bottom: 10px; /* Khoảng cách dưới mỗi bình luận */
-            margin-bottom: 8px; /* Khoảng cách giữa các bình luận */
-        }
+.comment-list .single-comment {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
 
-            .comment-list .single-comment .desc {
-                font-size: 0.8rem; /* Kích thước chữ bình luận */
-            }
+.comment-list .single-comment .thumb {
+    margin-right: 15px;
+}
+
+.comment-list .single-comment .desc {
+    font-size: 0.9rem;
+    flex-grow: 1;
+}
+
+.comment-list .single-comment .comment-avatar {
+    width: 50px; /* Kích thước avatar */
+    height: 50px; 
+    border-radius: 50%; /* Bo tròn avatar */
+    object-fit: cover; /* Đảm bảo ảnh vừa với khung */
+    border: 1px solid #ccc; /* Viền avatar */
+}
+
+.reply-btn a {
+        color: #ff9907;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.reply-btn a:hover {
+    text-decoration: underline;
+}
+
+.comment-form {
+    background-color: #fff;
+    padding: 20px;
+        text-transform: none;
+    border: 1px solid #ddd;
+}
+
+.comment-form h4 {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.comment-form .form-group {
+    margin-bottom: 15px;
+}
+
+.comment-form .form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+
+    border: 1px solid #ddd;
+}
+
+.comment-form .button.submit_btn {
+            background-color: #ff9907;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.comment-form .button.submit_btn:hover {
+                background-color: #ff9907;
+}
+
 </style>
+
+@section Scripts {
+    <script>
+        document.querySelector('#commentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const postId = formData.get('postId');
+            const username = formData.get('username');
+            const content = formData.get('content');
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            if (username && content) {
+                fetch('/Posts/AddComment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token // Thêm token vào headers
+                    },
+                    body: JSON.stringify({ postId, username, content })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const commentList = document.querySelector('.comment-list');
+                            const newComment = `
+                            <div class="single-comment justify-content-between d-flex">
+                                <div class="user justify-content-between d-flex">
+                                    <div class="thumb">
+                                        <img src="img/blog/c1.jpg" alt="">
+                                    </div>
+                                    <div class="desc">
+                                        <h5><a>${data.username}</a></h5>
+                                        <p class="date">${data.createdAt}</p>
+                                        <p class="comment">${data.content}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+                            commentList.insertAdjacentHTML('beforeend', newComment);
+
+                            // Clear the form
+                            document.querySelector('input[name="username"]').value = '';
+                            document.querySelector('textarea[name="content"]').value = '';
+                        } else {
+                            alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+
+    </script>
+}
